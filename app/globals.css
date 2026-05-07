@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces */
+  --color-bg: #fff6e8;          /* warm cream */
+  --color-bg-soft: #fff0d6;     /* deeper cream */
+  --color-bg-elev: #ffffff;     /* card white */
+  --color-line: #ead7b1;        /* soft sand */
+  --color-line-soft: #f4e8cb;
+
+  /* Ink */
+  --color-ink: #2a1f4a;         /* deep plum */
+  --color-ink-mute: #6c5d8c;    /* muted plum */
+  --color-ink-dim: #a99cc2;     /* light plum */
+
+  /* Accents — saturated for light bg */
+  --color-ember: #f2682c;       /* warm orange */
+  --color-ember-soft: #ffa564;
+  --color-ember-deep: #b94613;
+  --color-egg: #ffe1b8;
+  --color-yolk: #f5b324;        /* mustard */
+  --color-cyan: #2eb6d4;
+  --color-violet: #7d5be4;
+  --color-mint: #43b878;
+  --color-rose: #e64f8f;
+
+  /* Scenery palette — daytime sky + meadow */
+  --color-sky-1: #fffaec;        /* horizon cream */
+  --color-sky-2: #ffd6cf;        /* peach blush */
+  --color-sky-3: #ffc1d6;        /* candy pink */
+  --color-sky-4: #b9b6f0;        /* lavender */
+  --color-sky-5: #88cdee;        /* sky blue */
+  --color-grass-1: #6fb55f;      /* meadow green */
+  --color-grass-2: #97d56e;      /* fresh grass */
+  --color-grass-3: #c8e88f;      /* chartreuse */
+  --color-mountain-1: #9b87ce;   /* far lavender */
+  --color-mountain-2: #c89bb5;   /* mid pink */
+  --color-mountain-3: #f3b497;   /* near peach */
+  --color-magic: #e64f8f;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "JetBrains Mono", "Fira Code", "SF Mono", Menlo, monospace;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), "Fraunces", ui-serif, Georgia, serif;
+
+  --radius-card: 18px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 0 rgba(42, 31, 74, 0.04), 0 12px 32px -16px rgba(125, 91, 228, 0.18);
+  --shadow-glow: 0 0 0 1px rgba(242, 104, 44, 0.18), 0 12px 28px -10px rgba(242, 104, 44, 0.36);
+  --shadow-pop: 0 1px 0 rgba(42, 31, 74, 0.06), 0 6px 16px -6px rgba(42, 31, 74, 0.18), inset 0 -3px 0 rgba(42, 31, 74, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background:
+    radial-gradient(1200px 700px at 80% -10%, rgba(255, 193, 214, 0.55), transparent 65%),
+    radial-gradient(900px 600px at -10% 110%, rgba(185, 182, 240, 0.45), transparent 65%),
+    radial-gradient(700px 500px at 50% 50%, rgba(255, 250, 236, 0.6), transparent 70%),
+    var(--color-bg);
+  min-height: 100vh;
+}
+
+::selection { background: rgba(242, 104, 44, 0.25); color: var(--color-ink); }
+
+/* Utility patterns */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(42, 31, 74, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 31, 74, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dot-bg {
+  background-image: radial-gradient(rgba(42, 31, 74, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.noise-bg {
+  position: relative;
+}
+.noise-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
+}
+
+@keyframes pulse-ember {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(242, 104, 44, 0.4); }
+  50% { box-shadow: 0 0 0 14px rgba(242, 104, 44, 0); }
+}
+.ember-pulse { animation: pulse-ember 2.4s ease-out infinite; }
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-y { animation: float-y 4s ease-in-out infinite; }
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 20s linear infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(42, 31, 74, 0.06), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+
+/* Playful fontset utilities */
+.font-serif-wonky {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-variation-settings: "WONK" 1, "SOFT" 60, "opsz" 144;
+}
+
+.font-serif-display {
+  font-family: var(--font-serif);
+  font-variation-settings: "SOFT" 30, "opsz" 144;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+.wobble { animation: wobble 4s ease-in-out infinite; }
+
+@keyframes squish {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.05, 0.95); }
+}
+.squish { animation: squish 3s ease-in-out infinite; }
+
+@keyframes flap {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.4); }
+}
+.flap { animation: flap 0.5s ease-in-out infinite; }
+
+@keyframes blink {
+  0%, 96%, 100% { transform: scaleY(1); }
+  98% { transform: scaleY(0.1); }
+}
+.blink { animation: blink 5s ease-in-out infinite; }
+
+/* Hand-drawn underline style for accent words */
+.scribble-underline {
+  position: relative;
+  display: inline-block;
+}
+.scribble-underline::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -8px;
+  height: 12px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2 8 C 30 2, 60 12, 100 6 S 170 2, 198 8' fill='none' stroke='%23f2682c' stroke-width='3' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+/* Tilt-on-hover utility */
+.tilt-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tilt-hover:hover {
+  transform: translateY(-3px) rotate(-0.6deg);
+}
+
+/* Soft sticker style — used a lot in the cast cards / pills */
+.sticker {
+  box-shadow: var(--shadow-pop);
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-line-soft); }
