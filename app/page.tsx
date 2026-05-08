@@ -7,10 +7,30 @@ import { TopBar } from "@/components/game/TopBar";
 import { Sparkle } from "@/components/game/Scribble";
 import { CHAPTERS } from "@/lib/chapters";
 import { useProgress } from "@/lib/progress";
+import { useUser } from "@/lib/supabase/useUser";
+import { SUPABASE_ENABLED } from "@/lib/supabase/env";
 
 export default function Home() {
   const { progress, hydrated } = useProgress();
+  const { user, loading: authLoading } = useUser();
   const inProgress = hydrated && progress.completed.length > 0;
+
+  // First-time visitor's primary CTA: gate behind sign-in/up so we capture
+  // the account before they invest in chapter 0. Returning users with local
+  // progress get sent straight to their next chapter (auth happens later
+  // via the TopBar Sign in button).
+  const firstChapterSlug = CHAPTERS[0].slug;
+  const resumeChapterSlug =
+    CHAPTERS[Math.min(progress.completed.length, 10)].slug;
+
+  const needsSignIn =
+    SUPABASE_ENABLED && !authLoading && !user && !inProgress;
+
+  const startHref = inProgress
+    ? `/play/${resumeChapterSlug}`
+    : needsSignIn
+    ? `/login?next=${encodeURIComponent(`/play/${firstChapterSlug}`)}`
+    : `/play/${firstChapterSlug}`;
 
   return (
     <main className="min-h-screen">
@@ -106,17 +126,12 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-8 flex flex-wrap items-center gap-3"
             >
-              <Button
-                href={
-                  inProgress
-                    ? `/play/${
-                        CHAPTERS[Math.min(progress.completed.length, 10)].slug
-                      }`
-                    : "/play/what-is-a-gpt"
-                }
-                size="lg"
-              >
-                {inProgress ? "Resume hatching →" : "Start the journey →"}
+              <Button href={startHref} size="lg">
+                {inProgress
+                  ? "Resume hatching →"
+                  : needsSignIn
+                  ? "Sign up & start →"
+                  : "Start the journey →"}
               </Button>
               <Button href="/play" variant="secondary" size="lg">
                 See the world map
