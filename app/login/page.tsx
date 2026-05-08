@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { TopBar } from "@/components/game/TopBar";
@@ -11,7 +11,28 @@ import { Sage } from "@/components/characters/Sage";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { SUPABASE_ENABLED } from "@/lib/supabase/env";
 
+// useSearchParams() requires a Suspense boundary at build time.
+// Outer wraps the inner component so prerender can bail out cleanly.
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginShell />}>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginShell() {
+  return (
+    <main className="min-h-screen relative">
+      <TopBar />
+      <section className="mx-auto max-w-lg px-6 py-12 md:py-20 text-center text-ink-mute">
+        Loading…
+      </section>
+    </main>
+  );
+}
+
+function LoginInner() {
   const supabase = getSupabaseBrowser();
   const router = useRouter();
   const params = useSearchParams();
