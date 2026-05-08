@@ -25,9 +25,15 @@ export default function LoginPage() {
   // Already signed in? Bounce.
   useEffect(() => {
     if (!supabase) return;
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.replace(next);
-    });
+    let cancelled = false;
+    (async () => {
+      const result = await supabase.auth.getUser();
+      if (cancelled) return;
+      if (result.data.user) router.replace(next);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [supabase, router, next]);
 
   async function magicLink() {
