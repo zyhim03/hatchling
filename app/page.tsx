@@ -76,13 +76,12 @@ export default function Home() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.03em] leading-[1.02] text-ink"
+              className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.03em] leading-[1.02] text-ink text-balance"
             >
               Understand how{" "}
               <span className="font-serif-wonky italic text-ember scribble-underline">
                 AI
               </span>{" "}
-              <br className="hidden md:block" />
               actually{" "}
               <span className="font-serif-wonky italic text-violet">
                 thinks
